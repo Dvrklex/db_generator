@@ -1,7 +1,6 @@
-'use client'
-
 import React, { useState } from 'react';
-import './styles.css'
+import './styles.css';
+
 const FormField: React.FC = ({ onAddField }) => {
   const [model, setModel] = useState({
     modelname: '',
@@ -10,24 +9,25 @@ const FormField: React.FC = ({ onAddField }) => {
     isRequired: false,
     isPrimaryKey: false,
   });
+
   const [modelName, setModelName] = useState(''); // Estado para el nombre del modelo
 
   const handleAddField = () => {
-    // Aquí debes manejar la lógica para agregar un campo a la lista
     onAddField(model);
+
+    // Restablece los valores de los campos
     setModel({
+      modelname: model.modelname, // Asegúrate de establecer el valor correcto
       name: '',
       type: 'String',
       isRequired: false,
       isPrimaryKey: false,
     });
-    setModelName(model.modelname);
-
   };
 
   return (
     <div className="form-container">
-      <h2>Table Name: {modelName}</h2>
+      <h2>Table Name: {model.modelname}</h2>
       <div>
         <label htmlFor="tableName">Nombre del Modelo</label>
         <input
