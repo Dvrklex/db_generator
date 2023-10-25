@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import './styles.css';
 
-const FormField: React.FC = ({ onAddField }) => {
+interface FormFieldProps {
+  onAddField: (field: any) => void;
+}
+
+const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
   const [model, setModel] = useState({
     modelname: '',
     name: '',

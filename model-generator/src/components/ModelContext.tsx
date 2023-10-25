@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+
+// Define el tipo Field
+type Field = {
+  name: string;
+  type: string;
+  isRequired: boolean;
+  isPrimaryKey: boolean;
+};
 
 // Define un estado inicial vacío
 const initialState: Field[] = [];
@@ -18,9 +26,12 @@ const reducer = (state: Field[], action: Action): Field[] => {
 
 // Crea el contexto
 const ModelContext = createContext<{ state: Field[]; dispatch: React.Dispatch<Action> } | undefined>(undefined);
+interface ModelProviderProps {
+  children: ReactNode;
+}
 
 // Proveedor del contexto
-const ModelProvider: React.FC = ({ children }) => {
+const ModelProvider: React.FC<ModelProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return <ModelContext.Provider value={{ state, dispatch }}>{children}</ModelContext.Provider>;

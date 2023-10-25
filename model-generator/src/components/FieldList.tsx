@@ -1,6 +1,7 @@
 'use client'
-import React from 'react';
+import React,{useState} from 'react';
 import { useModelContext } from './ModelContext';
+
 
 interface Field {
   name: string;
@@ -13,30 +14,33 @@ interface FieldListProps {
   fields: Field[];
 }
 
-const FieldList: React.FC<FieldListProps> = ({ fields }) => {
-  const { state, dispatch } = useModelContext();
+// const FieldList: React.FC<FieldListProps> = ({ fields }) => {
+//   const { state, dispatch } = useModelContext();
 
-  const handleSaveModel = () => {
-    fetch('/create_model', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ model: fields }),
-    })
-      .then((response) => {
+const FieldList: React.FC<FieldListProps> = ({ fields }) => {
+    const { state, dispatch } = useModelContext();
+
+    const handleSaveModel = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/create_model', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(fields),
+        });
+  
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.json();
-      })
-      .then((data) => {
+  
+        const data = await response.json();
         console.log(data.message);
-      })
-      .catch((error) => {
+      } catch (error) {
+        console.log(fields)
         console.error('Error:', error);
-      });
-  };
+      }
+    };
   
   
 

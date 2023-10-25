@@ -1,0 +1,66 @@
+[
+  {
+    "model_name": "user",
+    "fields": [
+      {
+        "name": "id",
+        "type": "String",
+        "isRequired": true,
+        "isPrimaryKey": true
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "isRequired": true,
+        "isPrimaryKey": false
+      },
+      {
+        "name": "surname",
+        "type": "String",
+        "isRequired": true,
+        "isPrimaryKey": false
+      },
+      {
+        "name": "born",
+        "type": "TIMESTAMP",
+        "isRequired": false,
+        "isPrimaryKey": false
+      },
+      {
+        "name": "id",
+        "type": "String",
+        "isRequired": true,
+        "isPrimaryKey": true
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "isRequired": true,
+        "isPrimaryKey": false
+      },
+      {
+        "name": "surname",
+        "type": "String",
+        "isRequired": true,
+        "isPrimaryKey": false
+      },
+      {
+        "name": "born",
+        "type": "TIMESTAMP",
+        "isRequired": false,
+        "isPrimaryKey": false
+      }
+    ]
+  },
+  {
+    "model_name": "typeuser",
+    "fields": [
+      {
+        "name": "id",
+        "type": "String",
+        "isRequired": true,
+        "isPrimaryKey": true
+      }
+    ]
+  }
+]
