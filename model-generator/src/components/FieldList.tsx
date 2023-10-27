@@ -14,11 +14,9 @@ interface FieldListProps {
   fields: Field[];
 }
 
-// const FieldList: React.FC<FieldListProps> = ({ fields }) => {
-//   const { state, dispatch } = useModelContext();
-
 const FieldList: React.FC<FieldListProps> = ({ fields }) => {
     const { state, dispatch } = useModelContext();
+    const [currentFields, setCurrentFields] = useState([...fields]);
 
     const handleSaveModel = async () => {
       try {
@@ -36,6 +34,8 @@ const FieldList: React.FC<FieldListProps> = ({ fields }) => {
   
         const data = await response.json();
         console.log(data.message);
+        setCurrentFields([]);
+
       } catch (error) {
         console.log(fields)
         console.error('Error:', error);
@@ -45,22 +45,27 @@ const FieldList: React.FC<FieldListProps> = ({ fields }) => {
   
 
   return (
-    <div className="list-container">
-      <h2>Fields:</h2>
-      <ul>
-        {fields
-          .filter((field) => field.name && field.type)
-          .map((field, index) => (
-            <li key={index}>
-              <strong>{field.name}</strong>: {field.type}
-              {field.isPrimaryKey && ', primaryKey: true'}
-              {field.isRequired && ', allowNull: false'}
-            </li>
-          ))}
-      </ul>
-      <button onClick={handleSaveModel}>Guardar Modelo</button>
-    </div>
-  );
+    <div className="list-container p-4">
+    <h2 className="text-xl font-semibold">Fields:</h2>
+    <ul className="list-disc pl-6 mt-2">
+      {fields
+        .filter((field) => field.name && field.type)
+        .map((field, index) => (
+          <li key={index} className="mt-1">
+            <strong>{field.name}</strong>: {field.type}
+            {field.isPrimaryKey && ', primaryKey: true'}
+            {field.isRequired && ', allowNull: false'}
+          </li>
+        ))}
+    </ul>
+    <button
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded"
+      onClick={handleSaveModel}
+    >
+      Guardar Modelo
+    </button>
+  </div>
+);
 };
 
 export default FieldList;

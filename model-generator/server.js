@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
+const { Sequelize, DataTypes } = require('sequelize'); // Asegúrate de importar Sequelize
 
 const app = express();
 const port = 3001;
@@ -15,25 +16,62 @@ function loadModels() {
     const data = fs.readFileSync('models.json');
     return JSON.parse(data);
   } catch (error) {
-    // Si el archivo no existe o no se puede leer, se inicializa como un arreglo vacío
+    //* Si el archivo no existe o no se puede leer, se inicializa como un arreglo vacío
     return [];
   }
 }
 
+app.post('/generate/model', async (req, res) => {
+  try {
+    const sequelize = new Sequelize({
+      dialect: 'sqlite',
+      storage: 'database.sqlite', 
+    });
+
+    for (const model of modelsData) {
+      const modelAttributes = {};
+      for (const field of model.fields) {
+        modelAttributes[field.name] = {
+          type: field.type,
+          allowNull: !field.isRequired,
+          primaryKey: field.isPrimaryKey,
+        };
+      }
+
+      sequelize.define(model.model_name, modelAttributes);
+    }
+
+    //* Crea una migración con los modelos definidos
+    await sequelize.sync({ force: true });
+
+    // Ejecuta las migraciones
+    // const umzug = new Umzug({
+    //   storage: 'sequelize',
+    //   storageOptions: { sequelize },
+    //   migrations: { params: [sequelize.getQueryInterface(), Sequelize] },
+    // });
+
+    // await umzug.up(); // Esto ejecutará las migraciones
+
+    console.log('Migraciones exitosas.');
+    res.json({ message: 'Migraciones exitosas' });
+  } catch (error) {
+    console.error('Error al generar migraciones:', error);
+    res.status(500).json({ error: 'Error al generar migraciones' });
+  }
+});
+
 app.post('/create_model', (req, res) => {
   console.log('Solicitud POST recibida en /create_model:', req.body);
 
-  // Obtén los modelos existentes desde modelsData
   const existingModels = [...modelsData];
 
   req.body.forEach((model) => {
     const { modelname, ...fieldData } = model;
 
-    // Busca si ya existe un modelo con el mismo nombre
     const existingModel = existingModels.find((m) => m.model_name === modelname);
 
     if (existingModel) {
-      // Agrega los campos al modelo existente
       existingModel.fields.push({
         name: fieldData.name,
         type: fieldData.type,
@@ -41,7 +79,6 @@ app.post('/create_model', (req, res) => {
         isPrimaryKey: fieldData.isPrimaryKey,
       });
     } else {
-      // Si no existe, crea un nuevo modelo
       existingModels.push({
         model_name: modelname,
         fields: [
@@ -56,17 +93,14 @@ app.post('/create_model', (req, res) => {
     }
   });
 
-  // Guarda los modelos actualizados en modelsData
   modelsData = existingModels;
 
-  // Sobrescribe el archivo models.json con los modelos actualizados
   fs.writeFileSync('models.json', JSON.stringify(modelsData, null, 2));
 
   res.setHeader('Content-Type', 'application/json');
   res.json({ message: 'Modelo(s) guardado(s) correctamente' });
 });
 
-// Ruta para obtener modelos en formato JSON
 app.get('/models', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.json(modelsData);
