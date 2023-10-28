@@ -12,7 +12,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
    return (
     <div>
   <div className="glitch-label">
-    <label htmlFor="username">Usuario:</label>
+    <label htmlFor="username">Username</label>
     <input
       type="text"
       id="username"
@@ -21,7 +21,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     />
   </div>
   <div className="glitch-label">
-    <label htmlFor="password">Contraseña:</label>
+    <label htmlFor="password">Password</label>
     <input
       type="password"
       id="password"

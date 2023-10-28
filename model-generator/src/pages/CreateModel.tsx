@@ -19,18 +19,16 @@ const CreateModel: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) => {
   const router = useRouter();
   console.log("User isLogged??", isLogged);
 
-  // Mueve este useEffect fuera del condicional
   useEffect(() => {
     if (!isLogged && router) {
       router.push('/Login');
     }
   }, [isLogged, router]);
 
-  // Mueve este condicional al cuerpo del componente, no en el retorno
   if (!isLogged) {
     return (
       <div>
-        {/* Lo que quieras mostrar para usuarios no autenticados */}
+        {/*Proximamente: Informacion a mostrar para datos no autenticados*/}
       </div>
     );
   }
@@ -50,7 +48,9 @@ const CreateModel: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) => {
   return (
     <div>
       <div className="page-tsx">
-        <h1>Generador de Modelos de Base de Datos</h1>
+        <div className="glitch-wrapper">
+          <div className="glitch" data-text="Model creator">Model creator</div>
+        </div>
         <div className="model-container">
           <FormField onAddField={handleAddField} />
           <FieldList fields={fields} />

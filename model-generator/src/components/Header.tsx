@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ isLogged, setIsLogged }) => {
     <header className="header">
         {isLogged && (
             <div className="header-content">
-            <Link href="/">← Volver al Inicio</Link>
+            <Link href="/">← Go back</Link>
             <LogoutButton handleLogout={handleLogout} />
             </div>
         )}

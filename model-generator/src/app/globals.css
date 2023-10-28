@@ -232,8 +232,49 @@ a {
   }
 }
 
+.listNameModel{
+  border: solid 1px lightblue;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px auto;
+  max-width: 400px;
 
+}
 
+.checkboxContainer{
+  display: flex;
+    padding-left: 50px;
+}
+.listContainer{
+  width: 400px;
+}
+.listLIContainer li{
+  display: grid;
+}
+.linkNameModel a{
+  font-size: 14px;
+}
+.SaveModelBTN{
+  display: flex;
+}
+.linkNameModel a:hover{
+  cursor: pointer;
+  text-decoration: underline aliceblue;
+  transition: 0.5s;
+}
+
+.modelContainer{
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btmModelCreate{
+  margin: 20px auto ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 section {
   width: 100%;
   height: 100vh;
@@ -277,11 +318,13 @@ section > ul li:hover .a {
   animation: textAni 0.3s linear;
 }
 .footer {
+  max-width:400px ;
+  text-align: center;
   position: relative;
   bottom: 0;
   z-index: 9999;
   align-items: baseline;
-  margin:10px ;
+  margin:auto ;
   margin-top: 35px;
   border: solid 1px rgb(0, 238, 255);
   padding: 15px;
@@ -295,6 +338,10 @@ section > ul li:hover .a {
 .footer p {
   font-size: 14px;
   opacity: 0.8;
+}
+.footer p a:hover{
+  text-decoration: underline;
+  transition: all 0.5s;
 }
 
 .header {

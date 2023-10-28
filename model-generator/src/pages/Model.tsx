@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useModelContext } from '../components/ModelContext';
 import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
+import Link from 'next/link';
+
 
 interface Field {
   name: string;
@@ -32,7 +34,6 @@ const Model: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) => {
     }
   }, [isLogged, router]);
 
-  // Realiza la carga de datos en un solo useEffect
   useEffect(() => {
     if (isLogged) {
       fetch('http://localhost:3001/models')
@@ -65,43 +66,30 @@ const Model: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold">Página para ver modelos generados</h1>
-      <h2 className="text-xl font-semibold mt-4">Modelo Guardado:</h2>
-      <ul className="list-disc pl-6 mt-2">
-        {savedModel.map((field, index) => (
-          <li key={index} className="mt-1">
-            <strong>{field.name}</strong>: {field.type}
-            {field.isPrimaryKey && ', primaryKey: true'}
-            {field.isRequired && ', allowNull: false'}
-          </li>
-        ))}
-      </ul>
-      <h2 className="text-xl font-semibold mt-4">Modelos Cargados desde el Servidor:</h2>
-      <ul className="list-disc pl-6 mt-2">
+    <div className="glitch-wrapper">
+      <div className="glitch" data-text="My Models">
+        My Models
+      </div>
+    </div>
+    <div className="modelContainer">
+      <ul className="pl-6 mt-2">
         {loadedModels.map((model, index) => (
-          <li key={index} className="mt-1">
-            <strong className="font-semibold">Nombre del modelo:</strong> {model.model_name}
-            {model.fields && model.fields.length > 0 ? (
-              <ul className="list-disc pl-6 mt-2">
-                {model.fields.map((field, fieldIndex) => (
-                  <li key={fieldIndex} className="mt-1">
-                    <strong>{field.name}</strong>: {field.type}
-                    {field.isPrimaryKey && ', primaryKey: true'}
-                    {field.isRequired && ', allowNull: false'}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>Sin campos definidos</p>
-            )}
+          <li key={index} className="mt-1 listNameModel">
+            <Link href={`/model/${model.model_name}`}>
+              
+                <strong className="font-semibold linkModel">Model name →</strong>{' '}
+                {model.model_name}
+              
+            </Link>
           </li>
         ))}
       </ul>
+    </div>
       <button
-        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  btmModelCreate"
         onClick={handleGenerateSequelize}
       >
-        Generar Sequelize
+        Create Migration
       </button>
       
       

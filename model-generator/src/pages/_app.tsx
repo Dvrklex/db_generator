@@ -1,4 +1,3 @@
-// MyApp.tsx
 import React, { useState } from 'react';
 import { ModelProvider } from '../components/ModelContext';
 import { AppProps } from 'next/app';

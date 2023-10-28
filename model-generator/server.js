@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
-const { Sequelize, DataTypes } = require('sequelize'); // Asegúrate de importar Sequelize
-
+const { Sequelize, DataTypes } = require('sequelize');
 const app = express();
 const port = 3001;
 
@@ -77,6 +76,8 @@ app.post('/create_model', (req, res) => {
         type: fieldData.type,
         isRequired: fieldData.isRequired,
         isPrimaryKey: fieldData.isPrimaryKey,
+        defaultValue: fieldData.defaultValue, 
+        size: fieldData.size, 
       });
     } else {
       existingModels.push({
@@ -87,6 +88,8 @@ app.post('/create_model', (req, res) => {
             type: fieldData.type,
             isRequired: fieldData.isRequired,
             isPrimaryKey: fieldData.isPrimaryKey,
+            defaultValue: fieldData.defaultValue, 
+            size: fieldData.size, 
           },
         ],
       });
@@ -101,10 +104,24 @@ app.post('/create_model', (req, res) => {
   res.json({ message: 'Modelo(s) guardado(s) correctamente' });
 });
 
+
 app.get('/models', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.json(modelsData);
 });
+
+
+app.get('/models/:modelName', (req, res) => {
+  const modelName = req.params.modelName;
+  const model = modelsData.find((m) => m.model_name === modelName);
+
+  if (model) {
+    res.json(model);
+  } else {
+    res.status(404).json({ error: 'Modelo no encontrado' });
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Servidor en http://localhost:${port}`);

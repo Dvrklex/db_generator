@@ -1,4 +1,3 @@
-// LogoutButton.js
 import React from 'react';
 
 interface LogoutButtonProps {
@@ -7,7 +6,7 @@ interface LogoutButtonProps {
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ handleLogout }) => {
   return (
-    <button onClick={handleLogout}>Cerrar Sesión</button>
+    <button onClick={handleLogout}>Log out</button>
   );
 };
 

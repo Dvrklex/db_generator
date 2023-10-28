@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
-import LoginForm from '../components/LoginForm'; // Importa el componente LoginForm
+import LoginForm from '../components/LoginForm'; 
 
 interface LoginProps {
   setIsLogged: (value: boolean) => void;
@@ -20,13 +20,13 @@ const Login: React.FC<LoginProps> = ({ setIsLogged }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
       <div className="TitleContainer">
-          <h1 className="Title" data-text="Iniciar Sesión para continuar">Inicia Sesión para continuar</h1>
+          <h1 className="Title" data-text="Log in for continue">Log in for continue</h1>
       </div>
       <p className="subTitle">Powered with NextJS</p>
       <LoginForm onLogin={handleLogin} />
 
       <button onClick={handleLogin} className="glitch-wrapper btnLogin">
-        <span className="glitch" data-text="INGRESAR →">INGRESAR →</span>
+        <span className="glitch" data-text="Log in →">Log in →</span>
       </button>
       <Footer/>
 

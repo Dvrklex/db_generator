@@ -12,28 +12,32 @@ const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
     type: 'String',
     isRequired: false,
     isPrimaryKey: false,
+    defaultValue: '',
+    size: '', 
   });
+  
 
-  const [modelName, setModelName] = useState(''); // Estado para el nombre del modelo
+  const [modelName, setModelName] = useState(''); 
 
   const handleAddField = () => {
     onAddField(model);
 
-    // Restablece los valores de los campos
+   
     setModel({
-      modelname: model.modelname, // Asegúrate de establecer el valor correcto
+      modelname: model.modelname,
       name: '',
       type: 'String',
       isRequired: false,
       isPrimaryKey: false,
+      defaultValue: '',
+      size: '', 
     });
   };
 
   return (
     <div className="form-container">
-      <h2>Table Name: {model.modelname}</h2>
       <div>
-        <label htmlFor="tableName">Nombre del Modelo</label>
+        <label htmlFor="tableName">Model name → {model.modelname}</label>
         <input
           type="text"
           id="tableName"
@@ -42,7 +46,7 @@ const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
         />
       </div>
       <div>
-        <label htmlFor="fieldName">Nombre del Campo</label>
+        <label htmlFor="fieldName">Field name</label>
         <input
           type="text"
           id="fieldName"
@@ -51,7 +55,7 @@ const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
         />
       </div>
       <div>
-        <label htmlFor="fieldType">Tipo de dato</label>
+        <label htmlFor="fieldType">Field type</label>
         <select
           id="fieldType"
           value={model.type}
@@ -64,16 +68,32 @@ const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
         </select>
       </div>
       <div>
+        <label htmlFor="size">Size</label>
+        <input
+          type="text"
+          id="size"
+          value={model.size}
+          onChange={(e) => setModel({ ...model, size: e.target.value })}
+        />
+      </div>
+      <div>
+        <label htmlFor="size">Default value</label>
+        <input
+          type="text"
+          id="defaultValue"
+          value={model.defaultValue}
+          onChange={(e) => setModel({ ...model, defaultValue: e.target.value })}
+        />
+      </div>
+      <div className='checkboxContainer'>
         <label>
-          Requerido/Not NULL
+          Not NULL
           <input
             type="checkbox"
             checked={model.isRequired}
             onChange={() => setModel({ ...model, isRequired: !model.isRequired })}
           />
         </label>
-      </div>
-      <div>
         <label>
           Primary Key
           <input
@@ -83,7 +103,7 @@ const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
           />
         </label>
       </div>
-      <button onClick={handleAddField}>Agregar Campo</button>
+      <button onClick={handleAddField}>Add field</button>
     </div>
   );
 };
