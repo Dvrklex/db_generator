@@ -60,6 +60,33 @@
 -moz-box-shadow: 0px 0px 22px 0px rgba(224,148,0,0.75);
 transition: 0.5s;
 }
+
+.glitch-label {
+  
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px; /* Espacio entre los campos de usuario y contraseña */
+}
+
+.glitch-label label {
+  font-size: 26px;
+  font-weight: bold;
+  color: #FFFFFF;
+  letter-spacing: 3px;
+}
+
+.glitch-label input {
+  height: 70px;
+  width: 550px;
+  font-size: 16px;
+  border: 1px solid #FFFFFF;
+  padding: 10px;
+  border-radius: 5px;
+  color: #FFFFFF;
+  background-color: transparent;
+  margin-top: 5px; /* Espacio entre la etiqueta y el campo de entrada */
+}
+
 .glitch-wrapper {
   /* width: 100%; */
   /* height: 100%; */
@@ -249,12 +276,76 @@ section > ul li:hover .a {
   text-align: right;
   animation: textAni 0.3s linear;
 }
-.footer{
-  background: #333;
-  color: #fff;
-  text-align: center;
-  padding: 1rem;
-};
+.footer {
+  position: relative;
+  bottom: 0;
+  z-index: 9999;
+  align-items: baseline;
+  margin:10px ;
+  margin-top: 35px;
+  border: solid 1px rgb(0, 238, 255);
+  padding: 15px;
+  border-radius: 10px;
+  background: linear-gradient(to bottom, rgba(var(--tile-start-rgb), 0.6), rgba(var(--tile-end-rgb), 0.6));
+  border-top: 1px solid rgba(var(--tile-border), 0.6);
+  color: rgb(var(--foreground-rgb));
+  font-family: var(--font-mono);
+}
+
+.footer p {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(var(--background-end-rgb))
+  ) rgb(var(--background-start-rgb));
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.header-content a {
+  color: #FFFFFF;
+  text-decoration: none;
+  margin-right: 20px;  
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.header-content a:hover {
+  color: #00FFFF;  
+}
+
+.header-content button {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6.6px);
+  -webkit-backdrop-filter: blur(6.6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.header-content button:hover {
+  cursor: pointer;
+  box-shadow: 0px 0px 22px 0px rgba(224, 148, 0, 0.75);
+  -webkit-box-shadow: 0px 0px 22px 0px rgba(224, 148, 0, 0.75);
+  -moz-box-shadow: 0px 0px 22px 0px rgba(224, 148, 0, 0.75);
+  transition: 0.5s;
+}
+
 
 @keyframes textAni {
   0%, 100% {
@@ -266,4 +357,75 @@ section > ul li:hover .a {
       opacity: 1;
       letter-spacing: 100px;
   }
+}
+
+
+
+
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(to bottom, transparent, rgba(var(--background-end-rgb)))
+    rgba(var(--background-start-rgb));
+}
+
+.form-container h2 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #FFFFFF;
+}
+
+.form-container label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+.form-container input[type="text"],
+.form-container select,
+.form-container input[type="checkbox"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.form-container input {
+  height: 40px;
+  width: 100%;
+  font-size: 16px;
+  border: 1px solid #FFFFFF;
+  padding: 10px;
+  border-radius: 5px;
+  color: #FFFFFF;
+  background-color: transparent;
+  margin-top: 5px;
+}
+
+
+
+.form-container div {
+  width: 350px;
+  margin-bottom: 20px;
+}
+
+.form-container button {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  background-color: #16abff33;
+  color: #FFFFFF;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+  background-color: #0885ff33;
 }

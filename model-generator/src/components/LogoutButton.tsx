@@ -1,17 +1,11 @@
-// LogoutButton.tsx
-'use client'
+// LogoutButton.js
 import React from 'react';
 
 interface LogoutButtonProps {
-  setIsLogged: (value: boolean) => void;
+  handleLogout: () => void;
 }
 
-const LogoutButton: React.FC<LogoutButtonProps> = ({ setIsLogged }) => {
-  const handleLogout = () => {
-    // Desloguea al usuario estableciendo isLogged en false
-    setIsLogged(false);
-  };
-
+const LogoutButton: React.FC<LogoutButtonProps> = ({ handleLogout }) => {
   return (
     <button onClick={handleLogout}>Cerrar Sesión</button>
   );

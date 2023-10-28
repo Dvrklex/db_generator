@@ -4,13 +4,13 @@ import { useModelContext } from '../components/ModelContext';
 import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 
-
 interface Field {
   name: string;
   type: string;
   isRequired: boolean;
   isPrimaryKey: boolean;
 }
+
 interface CreateModelProps {
   isLogged: boolean;
   setIsLogged: (value: boolean) => void;
@@ -21,11 +21,10 @@ interface Model {
   fields: Field[];
 }
 
-const Model: React.FC<CreateModelProps>= ({ isLogged, setIsLogged}) => {
+const Model: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) => {
   const { state: savedModel } = useModelContext();
   const router = useRouter();
   const [loadedModels, setLoadedModels] = useState<Model[]>([]);
-  console.log("User isLogged??", isLogged);
 
   useEffect(() => {
     if (!isLogged && router) {
@@ -33,18 +32,17 @@ const Model: React.FC<CreateModelProps>= ({ isLogged, setIsLogged}) => {
     }
   }, [isLogged, router]);
 
-  if (!isLogged) {
-    return null;
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // Realiza la carga de datos en un solo useEffect
   useEffect(() => {
-    fetch('http://localhost:3001/models')
-      .then((response) => response.json())
-      .then((data) => {
-        setLoadedModels(data);
-      });
-  }, []);
+    if (isLogged) {
+      fetch('http://localhost:3001/models')
+        .then((response) => response.json())
+        .then((data) => {
+          setLoadedModels(data);
+        });
+    }
+  }, [isLogged]);
+
   const handleGenerateSequelize = async () => {
     try {
       const response = await fetch('http://localhost:3001/generate/model', {
@@ -64,7 +62,6 @@ const Model: React.FC<CreateModelProps>= ({ isLogged, setIsLogged}) => {
       console.error('Error en la generación de Sequelize:', error);
     }
   };
-
 
   return (
     <div className="container mx-auto p-4">
@@ -106,8 +103,7 @@ const Model: React.FC<CreateModelProps>= ({ isLogged, setIsLogged}) => {
       >
         Generar Sequelize
       </button>
-      <Footer/>
-
+      
       
     </div>
   );

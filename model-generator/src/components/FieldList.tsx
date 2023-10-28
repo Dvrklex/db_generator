@@ -46,26 +46,27 @@ const FieldList: React.FC<FieldListProps> = ({ fields }) => {
 
   return (
     <div className="list-container p-4">
-    <h2 className="text-xl font-semibold">Fields:</h2>
-    <ul className="list-disc pl-6 mt-2">
-      {fields
-        .filter((field) => field.name && field.type)
-        .map((field, index) => (
-          <li key={index} className="mt-1">
-            <strong>{field.name}</strong>: {field.type}
-            {field.isPrimaryKey && ', primaryKey: true'}
-            {field.isRequired && ', allowNull: false'}
-          </li>
-        ))}
-    </ul>
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded"
-      onClick={handleSaveModel}
-    >
-      Guardar Modelo
-    </button>
-  </div>
-);
+      <h2 className="text-xl font-semibold">Fields:</h2>
+      <ul className="list-disc pl-6 mt-2">
+        {fields
+          .filter((field) => field.name && field.type)
+          .map((field, index) => (
+            <li key={index} className="mt-4 glitch-label">
+              <strong>{field.name}</strong>: {field.type}
+              {field.isPrimaryKey && ', primaryKey: true'}
+              {field.isRequired && ', allowNull: false'}
+            </li>
+          ))}
+      </ul>
+      <button
+        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded glitch-button"
+        onClick={handleSaveModel}
+      >
+        Guardar Modelo
+      </button>
+    </div>
+  
+  );
 };
 
 export default FieldList;

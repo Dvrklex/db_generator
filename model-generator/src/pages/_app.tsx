@@ -11,9 +11,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ModelProvider>
-      <Header setIsLogged={setIsLogged}></Header>
-      <Component {...pageProps} isLogged={isLogged} setIsLogged={setIsLogged} />
-    </ModelProvider>
+    <Header isLogged={isLogged} setIsLogged={setIsLogged} />
+    <Component {...pageProps} isLogged={isLogged} setIsLogged={setIsLogged} />
+  </ModelProvider>
   );
 }
 

@@ -8,19 +8,19 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/login',
-        destination: '/login',
+        source: '/Login',
+        destination: '/Login',
       },
       {
-        source: '/model',
-        destination: '/model',
+        source: '/Model',
+        destination: '/Model',
       },
       {
-        source: '/create_model',
-        destination: '/create_model',
+        source: '/CreateModel',
+        destination: '/CreateModel',
       },
       {
-        source: '/home',
+        source: '/Home',
         destination: '/',
       },
     ];

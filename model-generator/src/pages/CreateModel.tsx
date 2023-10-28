@@ -5,27 +5,34 @@ import FieldList from '../components/FieldList';
 import Footer from '../components/Footer';
 import { useRouter } from 'next/router';
 
+
+
 interface CreateModelProps {
   children: ReactNode;
-  isLogged: boolean; // Agregar isLogged
-  setIsLogged: (value: boolean) => void; // Agregar setIsLogged
+  isLogged: boolean;
+  setIsLogged: (value: boolean) => void;
 }
 
 const CreateModel: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) => {
-  
   const [fields, setFields] = useState([] as any[]);
   const [modelName, setModelName] = useState('');
-  const router = useRouter(); 
+  const router = useRouter();
   console.log("User isLogged??", isLogged);
 
+  // Mueve este useEffect fuera del condicional
   useEffect(() => {
     if (!isLogged && router) {
       router.push('/Login');
     }
   }, [isLogged, router]);
 
+  // Mueve este condicional al cuerpo del componente, no en el retorno
   if (!isLogged) {
-    return null;
+    return (
+      <div>
+        {/* Lo que quieras mostrar para usuarios no autenticados */}
+      </div>
+    );
   }
 
   const handleAddField = (field: any) => {
@@ -49,9 +56,10 @@ const CreateModel: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) => {
           <FieldList fields={fields} />
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
+
 
 export default CreateModel;
