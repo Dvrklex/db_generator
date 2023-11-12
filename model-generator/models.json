@@ -55,26 +55,5 @@
         "isPrimaryKey": false
       }
     ]
-  },
-  {
-    "model_name": "Instrument",
-    "fields": [
-      {
-        "name": "id",
-        "type": "Integer",
-        "isRequired": true,
-        "isPrimaryKey": true,
-        "defaultValue": "0",
-        "size": "336"
-      },
-      {
-        "name": "detail",
-        "type": "String",
-        "isRequired": true,
-        "isPrimaryKey": false,
-        "defaultValue": "detail",
-        "size": "36"
-      }
-    ]
   }
 ]

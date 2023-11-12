@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 
 interface FormFieldProps {
@@ -15,13 +15,36 @@ const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
     defaultValue: '',
     size: '', 
   });
-  
+  const [relation, setRelation] = useState({
+    targetModel: '',
+    foreignKey: '',
+  });
+  const [modelsList, setModelsList] = useState<string[]>([]);
+  const [selectedModelAttributes, setSelectedModelAttributes] = useState<string[]>([]);
 
+
+  useEffect(() => {
+    // Obtén la lista de modelos disponibles al cargar el componente
+    fetch('http://localhost:3001/models')
+      .then((response) => response.json())
+      .then((data) => {
+        setModelsList(data.map((model: any) => model.model_name));
+      });
+  }, []);
+  useEffect(() => {
+    if (relation.targetModel) {
+      fetch(`http://localhost:3001/models/${relation.targetModel}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setSelectedModelAttributes(data.fields.map((field: any) => field.name));
+        });
+    }
+  }, [relation.targetModel]);
   const [modelName, setModelName] = useState(''); 
 
   const handleAddField = () => {
     onAddField(model);
-
+    onAddField({ ...model, relations: [{ ...relation }] });
    
     setModel({
       modelname: model.modelname,
@@ -32,8 +55,18 @@ const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
       defaultValue: '',
       size: '', 
     });
+    setRelation({
+      targetModel: '',
+      foreignKey: '',
+    });
   };
+  // const handleAddRelation = () => {
+  //   // Agrega la relación al modelo
+   
 
+  //   // Reinicia el estado de la relación
+    
+  // };
   return (
     <div className="form-container">
       <div>
@@ -102,6 +135,39 @@ const FormField: React.FC<FormFieldProps> = ({ onAddField }) => {
             onChange={() => setModel({ ...model, isPrimaryKey: !model.isPrimaryKey })}
           />
         </label>
+      </div>
+      
+    <div>
+        <label htmlFor="relationTargetModel">Target Model</label>
+        <select
+          id="relationTargetModel"
+          value={relation.targetModel}
+          onChange={(e) => setRelation({ ...relation, targetModel: e.target.value })}
+        >
+          <option value="">Select Target Model</option>
+          {modelsList.map((modelName) => (
+            <option key={modelName} value={modelName}>
+              {modelName}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label htmlFor="relationForeignKey">Foreign Key</label>
+        <select
+          id="relationForeignKey"
+          value={relation.foreignKey}
+          onChange={(e) => setRelation({ ...relation, foreignKey: e.target.value })}
+        >
+          <option value="">Select Foreign Key</option>
+          {selectedModelAttributes.map((attribute) => (
+            <option key={attribute} value={attribute}>
+              {attribute}
+            </option>
+          ))}
+        </select>
+        {/* <button onClick={handleAddRelation}>Add relation</button> */}
+
       </div>
       <button onClick={handleAddField}>Add field</button>
     </div>

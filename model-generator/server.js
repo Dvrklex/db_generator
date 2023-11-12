@@ -20,7 +20,6 @@ function loadModels() {
     return [];
   }
 }
-
 app.post('/generate/model', async (req, res) => {
   try {
     const sequelize = new Sequelize({
@@ -28,33 +27,69 @@ app.post('/generate/model', async (req, res) => {
       storage: 'database.sqlite',
     });
 
-    // Crear la carpeta generatedModels si no existe
     if (!fs.existsSync(generatedModelsFolder)) {
       fs.mkdirSync(generatedModelsFolder);
     }
 
     for (const model of modelsData) {
       const modelAttributes = {};
+      const modelOptions = {};
+      const modelRelations = [];
+
       for (const field of model.fields) {
         modelAttributes[field.name] = {
           type: field.type,
           allowNull: !field.isRequired,
           primaryKey: field.isPrimaryKey,
         };
+        if (field.relations) {
+          modelRelations.push({
+            targetModel: field.relations[0].targetModel,
+            foreignKey: field.relations[0].foreignKey,
+          });
+        }
       }
+      const currentModel = sequelize.define(model.model_name, modelAttributes, modelOptions);
 
-      sequelize.define(model.model_name, modelAttributes);
+      for (const relation of modelRelations) {
+        console.log(`Definiendo relación para ${model.model_name} hacia ${relation.targetModel}`);
 
-      const modelCode = `const { Sequelize, DataTypes } = require('sequelize');
+        const targetModel = sequelize.models[relation.targetModel];
 
-        const ${model.model_name} = (sequelize) => {
-          return sequelize.define('${model.model_name}', ${JSON.stringify(modelAttributes, null, 2)});
-        };
+        currentModel.belongsTo(targetModel, {
+          foreignKey: relation.foreignKey,
+          targetKey: targetModel.primaryKeyField, 
+        });
+      }
+      function generateRelationsCode(relations) {
+        const relationCode = relations.map(relation => {
+          return `
+      ${model.model_name}.belongsTo(${relation.targetModel}, {
+        foreignKey: '${relation.foreignKey}',
+        targetKey: 'id',
+      });`;
+        }).join('\n');
+      
+        return `
+      // Definir relaciones
+      ${relationCode}
+      `;
+      }
+      const modelCode = `const { Sequelize, DataTypes, Model } = require('sequelize');
+
+        class ${model.model_name} extends Model {}
+
+        ${model.model_name}.init(${JSON.stringify(modelAttributes, null, 2)}, {
+          sequelize,
+          modelName: '${model.model_name}',
+        });
+
+        ${model.relations ? generateRelationsCode(model.relations) : ''}
 
         module.exports = ${model.model_name};`;
 
       fs.writeFileSync(`${generatedModelsFolder}/${model.model_name}.js`, modelCode);
-            }
+    }
 
     await sequelize.sync({ force: true });
 
@@ -65,6 +100,7 @@ app.post('/generate/model', async (req, res) => {
     res.status(500).json({ error: 'Error al generar migraciones y archivos de modelos' });
   }
 });
+
 
 app.post('/create_model', (req, res) => {
   console.log('Solicitud POST recibida en /create_model:', req.body);
@@ -82,9 +118,13 @@ app.post('/create_model', (req, res) => {
         type: fieldData.type,
         isRequired: fieldData.isRequired,
         isPrimaryKey: fieldData.isPrimaryKey,
-        defaultValue: fieldData.defaultValue, 
-        size: fieldData.size, 
+        defaultValue: fieldData.defaultValue,
+        size: fieldData.size,
       });
+
+      if (fieldData.relations) {
+        existingModel.relations = fieldData.relations;
+      }
     } else {
       existingModels.push({
         model_name: modelname,
@@ -94,10 +134,11 @@ app.post('/create_model', (req, res) => {
             type: fieldData.type,
             isRequired: fieldData.isRequired,
             isPrimaryKey: fieldData.isPrimaryKey,
-            defaultValue: fieldData.defaultValue, 
-            size: fieldData.size, 
+            defaultValue: fieldData.defaultValue,
+            size: fieldData.size,
           },
         ],
+        relations: fieldData.relations || [],
       });
     }
   });
@@ -111,22 +152,31 @@ app.post('/create_model', (req, res) => {
 });
 
 
+
 app.get('/models', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.json(modelsData);
 });
 
 
-app.get('/models/:modelName', (req, res) => {
+app.get('/get/model/:modelName', (req, res) => {
   const modelName = req.params.modelName;
-  const model = modelsData.find((m) => m.model_name === modelName);
+  const modelFileName = `${generatedModelsFolder}/${modelName}.js`;
 
-  if (model) {
-    res.json(model);
-  } else {
-    res.status(404).json({ error: 'Modelo no encontrado' });
+  try {
+    if (fs.existsSync(modelFileName)) {
+      const modelCode = fs.readFileSync(modelFileName, 'utf-8');
+      res.json({ code: modelCode });
+    } else {
+      console.error(`El archivo del modelo ${modelName} no existe.`);
+      res.status(404).json({ error: 'Modelo no encontrado' });
+    }
+  } catch (error) {
+    console.error(`Error al leer el código del modelo ${modelName}:`, error);
+    res.status(500).json({ error: 'Error al obtener el código Sequelize del modelo' });
   }
 });
+
 
 
 app.listen(port, () => {

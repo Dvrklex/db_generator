@@ -1,7 +1,8 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 
-        const user = (sequelize) => {
-          return sequelize.define('user', {
+        class user extends Model {}
+
+        user.init({
   "id": {
     "type": "String",
     "allowNull": false,
@@ -34,7 +35,11 @@ const { Sequelize, DataTypes } = require('sequelize');
     "_modelAttribute": true,
     "field": "surname"
   }
-});
-        };
+}, {
+          sequelize,
+          modelName: 'user',
+        });
+
+        
 
         module.exports = user;
