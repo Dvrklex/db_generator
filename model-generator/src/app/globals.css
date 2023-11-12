@@ -283,7 +283,19 @@ section {
   align-items: center;
   justify-content: center;
 }
-
+.source-code{
+  color: #fff;
+  background-color: #6a737d00;
+  border: solid 1px white;
+  border-radius: 10px;
+  text-align: start;
+  padding: 10px;
+  width: 750px;
+}
+.source-code h2{
+  color: #0cb2ff;
+  text-align: center;
+}
 section > ul {
   list-style: none;
   width: 250px;

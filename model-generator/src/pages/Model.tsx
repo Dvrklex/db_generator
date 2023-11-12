@@ -1,10 +1,8 @@
-'use client'
+// 'use client'
 import React, { useEffect, useState } from 'react';
 import { useModelContext } from '../components/ModelContext';
 import { useRouter } from 'next/router';
-import Footer from '../components/Footer';
 import Link from 'next/link';
-
 
 interface Field {
   name: string;
@@ -72,6 +70,7 @@ const ModelComponent: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) =
   
       if (response.ok) {
         const data = await response.json();
+        setSelectedModel(model);
         setSequelizeCode(data.code);
       } else {
         const errorMessage = await response.text(); // Obtener el mensaje de error
@@ -81,7 +80,6 @@ const ModelComponent: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) =
       console.error('Error al obtener el código Sequelize:', error);
     }
   };
-  
 
   return (
     <div className="container mx-auto p-4">
@@ -95,16 +93,9 @@ const ModelComponent: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) =
           {loadedModels.map((model, index) => (
             <li key={index} className="mt-1 listNameModel">
               <Link href={`/model/${model.model_name}`}>
-                <strong
-                  className="font-semibold linkModel"
-                  onClick={() => {
-                    setSelectedModel(model);
-                    setSequelizeCode(null); // Limpiar el código al cambiar de modelo
-                  }}
-                >
-                  Model name →
-                </strong>{' '}
-                {model.model_name}
+                <strong className="font-semibold linkModel">
+                  Model name → {model.model_name}
+                </strong>
               </Link>
               <button
                 className="ml-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
@@ -122,8 +113,8 @@ const ModelComponent: React.FC<CreateModelProps> = ({ isLogged, setIsLogged }) =
       >
         Create Migration
       </button>
-      {sequelizeCode && (
-        <div className="mt-4">
+      {selectedModel && (
+        <div className="mt-4 source-code">
           <h2 className="text-xl font-semibold mb-2">Sequelize Code</h2>
           <pre>{sequelizeCode}</pre>
         </div>
