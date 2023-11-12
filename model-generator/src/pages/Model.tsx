@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useModelContext } from '../components/ModelContext';
 import { useRouter } from 'next/router';
-import Footer from '../components/Footer';
 import Link from 'next/link';
 
 

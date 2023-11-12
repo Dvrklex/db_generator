@@ -7,6 +7,7 @@ const port = 3001;
 
 app.use(express.json());
 app.use(cors());
+const generatedModelsFolder = 'generatedModels';  
 
 let modelsData = loadModels();
 
@@ -24,8 +25,13 @@ app.post('/generate/model', async (req, res) => {
   try {
     const sequelize = new Sequelize({
       dialect: 'sqlite',
-      storage: 'database.sqlite', 
+      storage: 'database.sqlite',
     });
+
+    // Crear la carpeta generatedModels si no existe
+    if (!fs.existsSync(generatedModelsFolder)) {
+      fs.mkdirSync(generatedModelsFolder);
+    }
 
     for (const model of modelsData) {
       const modelAttributes = {};
@@ -38,25 +44,25 @@ app.post('/generate/model', async (req, res) => {
       }
 
       sequelize.define(model.model_name, modelAttributes);
-    }
 
-    //* Crea una migración con los modelos definidos
+      const modelCode = `const { Sequelize, DataTypes } = require('sequelize');
+
+        const ${model.model_name} = (sequelize) => {
+          return sequelize.define('${model.model_name}', ${JSON.stringify(modelAttributes, null, 2)});
+        };
+
+        module.exports = ${model.model_name};`;
+
+      fs.writeFileSync(`${generatedModelsFolder}/${model.model_name}.js`, modelCode);
+            }
+
     await sequelize.sync({ force: true });
-
-    // Ejecuta las migraciones
-    // const umzug = new Umzug({
-    //   storage: 'sequelize',
-    //   storageOptions: { sequelize },
-    //   migrations: { params: [sequelize.getQueryInterface(), Sequelize] },
-    // });
-
-    // await umzug.up(); // Esto ejecutará las migraciones
 
     console.log('Migraciones exitosas.');
     res.json({ message: 'Migraciones exitosas' });
   } catch (error) {
-    console.error('Error al generar migraciones:', error);
-    res.status(500).json({ error: 'Error al generar migraciones' });
+    console.error('Error al generar migraciones y archivos de modelos:', error);
+    res.status(500).json({ error: 'Error al generar migraciones y archivos de modelos' });
   }
 });
 
